@@ -74,6 +74,10 @@ const PRODUCT_CONFIG = {
   aesthete: { label: 'Aesthete', href: 'https://aesthete.re8ch.com', icon: 'PRODUCTS/aesthete/SVG/icon.svg', color: '#d6a23e' },
   anycam: { label: 'Anycam', href: 'https://anycam.re8ch.com', icon: 'PRODUCTS/anycam/SVG/icon.svg', color: '#16a34a' },
   phonaid: { label: 'Phonaid', href: 'https://phonaid.com', icon: 'PRODUCTS/phonaid/SVG/icon.svg', color: '#8b5cf6' },
+  'user-hub': { label: 'User Hub', href: 'https://auth.re8ch.com', icon: 'PRODUCTS/user-hub/SVG/icon.svg', color: '#0a7fbe' },
+  advfab: { label: 'AdvFab', href: 'https://advfab.org', icon: 'PRODUCTS/advfab/SVG/icon.svg', color: '#0d9488' },
+  'among-clusters': { label: 'Among Clusters', href: 'https://among-clusters.github.io/website/', icon: 'PRODUCTS/among-clusters/SVG/icon.svg', color: '#6d5dfc' },
+  'public-edge': { label: 'Public Edge', href: 'https://public-edge.github.io/website/', icon: 'PRODUCTS/public-edge/SVG/icon.svg', color: '#e0700b' },
 };
 
 const DEFAULT_LINKS = {
@@ -305,6 +309,7 @@ function normalizeProductId(id) {
   if (id === 'image') return 'registry-image';
   if (id === 'registry') return 'registry-image';
   if (id === 'earth') return 'anysite';
+  if (id === 'userhub' || id === 'auth') return 'user-hub';
   return id || 're8ch';
 }
 
