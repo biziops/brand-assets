@@ -2,13 +2,19 @@
   "version": "v1",
   "productLinks": [
     ["RE8CH", "https://re8ch.com"],
-    ["AnySite", "https://anysiteonearth.re8ch.com"],
+    ["CompoCV", "https://compocv.re8ch.com"],
     ["Ledger", "https://ledger.re8ch.com"],
-    ["Registry Image", "https://image.re8ch.com"],
+    ["AnySite", "https://anysiteonearth.re8ch.com"],
+    ["Anycam", "https://anycam.re8ch.com"],
+    ["Aesthete", "https://aesthete.re8ch.com"],
+    ["Phonaid", "https://phonaid.com"],
     ["Cluster", "https://cluster.re8ch.com"],
     ["Observable", "https://observable.re8ch.com"],
-    ["Anycam", "https://anycam.re8ch.com"],
-    ["Phonaid", "https://phonaid.com"]
+    ["Registry Image", "https://image.re8ch.com"],
+    ["User Hub", "https://auth.re8ch.com"],
+    ["AdvFab", "https://advfab.org"],
+    ["Among Clusters", "https://among-clusters.github.io/website/"],
+    ["Public Edge", "https://public-edge.github.io/website/"]
   ],
   "content": {
     "en": {

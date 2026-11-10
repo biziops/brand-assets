@@ -23,14 +23,18 @@ const RE8CH_FOOTER_CONFIG = {
   },
   products: [
     { id: 'compocv', label: 'CompoCV', href: 'https://compocv.re8ch.com', icon: 'PRODUCTS/compocv/SVG/icon.svg', brandColor: '#2563eb' },
-    { id: 'anycam', label: 'Anycam', href: 'https://anycam.re8ch.com', icon: 'PRODUCTS/anycam/SVG/icon.svg', brandColor: '#16a34a' },
-    { id: 'anysite', label: 'AnySite', href: 'https://anysiteonearth.re8ch.com', icon: 'PRODUCTS/anysiteonearth/SVG/icon.svg', brandColor: '#14b8c4' },
-    { id: 'cluster', label: 'Cluster', href: 'https://cluster.re8ch.com', icon: 'PRODUCTS/cluster/SVG/icon-no-edge.svg', brandColor: '#00b559' },
     { id: 'ledger', label: 'Ledger', href: 'https://ledger.re8ch.com', icon: 'PRODUCTS/lizhang-ledger/SVG/icon.svg', brandColor: '#2563eb' },
-    { id: 'observable', label: 'Observable', href: 'https://observable.re8ch.com', icon: 'PRODUCTS/observable/SVG/icon.svg', brandColor: '#f81018' },
+    { id: 'anysite', label: 'AnySite', href: 'https://anysiteonearth.re8ch.com', icon: 'PRODUCTS/anysiteonearth/SVG/icon.svg', brandColor: '#14b8c4' },
+    { id: 'anycam', label: 'Anycam', href: 'https://anycam.re8ch.com', icon: 'PRODUCTS/anycam/SVG/icon.svg', brandColor: '#16a34a' },
     { id: 'aesthete', label: 'Aesthete', href: 'https://aesthete.re8ch.com', icon: 'PRODUCTS/aesthete/SVG/icon.svg', brandColor: '#d6a23e' },
-    { id: 'phonaid', label: 'Phonaid', href: 'https://phonaid.com', icon: 'PRODUCTS/phonaid/SVG/icon.svg', brandColor: '#8b5cf6' },
+    { id: 'phonaid', label: 'Phonaid', href: { en: 'https://phonaid.com/' }, icon: 'PRODUCTS/phonaid/SVG/icon.svg', brandColor: '#8b5cf6' },
+    { id: 'cluster', label: 'Cluster', href: 'https://cluster.re8ch.com', icon: 'PRODUCTS/cluster/SVG/icon-no-edge.svg', brandColor: '#00b559' },
+    { id: 'observable', label: 'Observable', href: 'https://observable.re8ch.com', icon: 'PRODUCTS/observable/SVG/icon.svg', brandColor: '#f81018' },
     { id: 'registry-image', label: 'Registry Image', href: 'https://image.re8ch.com', icon: 'PRODUCTS/registry/SVG/icon.svg', brandColor: '#0a7fbe' },
+    { id: 'user-hub', label: 'User Hub', href: { en: 'https://auth.re8ch.com/' }, icon: 'PRODUCTS/user-hub/SVG/icon.svg', brandColor: '#0a7fbe' },
+    { id: 'advfab', label: 'AdvFab', href: { en: 'https://advfab.org/', 'zh-CN': 'https://advfab.org/zh-CN/' }, icon: 'PRODUCTS/advfab/SVG/icon.svg', brandColor: '#0d9488' },
+    { id: 'among-clusters', label: 'Among Clusters', href: { en: 'https://among-clusters.github.io/website/en/', 'zh-CN': 'https://among-clusters.github.io/website/zh-CN/' }, icon: 'PRODUCTS/among-clusters/SVG/icon.svg', brandColor: '#6d5dfc' },
+    { id: 'public-edge', label: 'Public Edge', href: { en: 'https://public-edge.github.io/website/en/', 'zh-CN': 'https://public-edge.github.io/website/zh-CN/' }, icon: 'PRODUCTS/public-edge/SVG/icon.svg', brandColor: '#e0700b' },
   ],
   companyRecords: [
     {
@@ -236,7 +240,11 @@ const FOOTER_CONTENT = {
       "observable": "Observability",
       "aesthete": "Makeup simulation",
       "phonaid": "Call assistant",
-      "registry-image": "Image registry"
+      "registry-image": "Image registry",
+      "user-hub": "Account center",
+      "advfab": "Network evidence",
+      "among-clusters": "Cluster peering",
+      "public-edge": "Public ingress"
     },
     "records": {
       "montana-sos": "Montana registry",
@@ -269,7 +277,11 @@ const FOOTER_CONTENT = {
       "observable": "可观测",
       "aesthete": "妆效模拟",
       "phonaid": "通话助手",
-      "registry-image": "镜像仓库"
+      "registry-image": "镜像仓库",
+      "user-hub": "个人中心",
+      "advfab": "网络证据",
+      "among-clusters": "集群互联",
+      "public-edge": "公共入口"
     },
     "records": {
       "montana-sos": "蒙大拿州企业登记",
@@ -302,7 +314,11 @@ const FOOTER_CONTENT = {
       "observable": "可觀測",
       "aesthete": "妝效模擬",
       "phonaid": "通話助理",
-      "registry-image": "映像倉庫"
+      "registry-image": "映像倉庫",
+      "user-hub": "個人中心",
+      "advfab": "網路證據",
+      "among-clusters": "叢集互聯",
+      "public-edge": "公共入口"
     },
     "records": {
       "montana-sos": "蒙大拿州企業登記",
@@ -335,7 +351,11 @@ const FOOTER_CONTENT = {
       "observable": "Observabilidad",
       "aesthete": "Simulación de maquillaje",
       "phonaid": "Asistente de llamadas",
-      "registry-image": "Registro de imágenes"
+      "registry-image": "Registro de imágenes",
+      "user-hub": "Centro de cuenta",
+      "advfab": "Evidencia de red",
+      "among-clusters": "Interconexión de clústeres",
+      "public-edge": "Entrada pública"
     },
     "records": {
       "montana-sos": "Registro de Montana",
@@ -368,7 +388,11 @@ const FOOTER_CONTENT = {
       "observable": "قابلية الرصد",
       "aesthete": "محاكاة المكياج",
       "phonaid": "مساعد المكالمات",
-      "registry-image": "سجل الصور"
+      "registry-image": "سجل الصور",
+      "user-hub": "مركز الحساب",
+      "advfab": "أدلة الشبكة",
+      "among-clusters": "ربط العناقيد",
+      "public-edge": "مدخل عام"
     },
     "records": {
       "montana-sos": "سجل مونتانا",
@@ -401,7 +425,11 @@ const FOOTER_CONTENT = {
       "observable": "अवलोकनीयता",
       "aesthete": "मेकअप सिमुलेशन",
       "phonaid": "कॉल सहायक",
-      "registry-image": "इमेज रजिस्ट्री"
+      "registry-image": "इमेज रजिस्ट्री",
+      "user-hub": "खाता केंद्र",
+      "advfab": "नेटवर्क साक्ष्य",
+      "among-clusters": "क्लस्टर पीयरिंग",
+      "public-edge": "सार्वजनिक इनग्रेस"
     },
     "records": {
       "montana-sos": "मोंटाना रजिस्ट्री",
@@ -434,7 +462,11 @@ const FOOTER_CONTENT = {
       "observable": "Observabilidade",
       "aesthete": "Simulação de maquiagem",
       "phonaid": "Assistente de chamadas",
-      "registry-image": "Registro de imagens"
+      "registry-image": "Registro de imagens",
+      "user-hub": "Central da conta",
+      "advfab": "Evidências de rede",
+      "among-clusters": "Interconexão de clusters",
+      "public-edge": "Entrada pública"
     },
     "records": {
       "montana-sos": "Registro de Montana",
@@ -467,7 +499,11 @@ const FOOTER_CONTENT = {
       "observable": "পর্যবেক্ষণযোগ্যতা",
       "aesthete": "মেকআপ সিমুলেশন",
       "phonaid": "কল সহকারী",
-      "registry-image": "ইমেজ রেজিস্ট্রি"
+      "registry-image": "ইমেজ রেজিস্ট্রি",
+      "user-hub": "অ্যাকাউন্ট কেন্দ্র",
+      "advfab": "নেটওয়ার্ক প্রমাণ",
+      "among-clusters": "ক্লাস্টার পিয়ারিং",
+      "public-edge": "পাবলিক ইনগ্রেস"
     },
     "records": {
       "montana-sos": "মন্টানা নিবন্ধন",
@@ -500,7 +536,11 @@ const FOOTER_CONTENT = {
       "observable": "Наблюдаемость",
       "aesthete": "Симуляция макияжа",
       "phonaid": "Помощник звонков",
-      "registry-image": "Реестр образов"
+      "registry-image": "Реестр образов",
+      "user-hub": "Центр аккаунта",
+      "advfab": "Сетевые доказательства",
+      "among-clusters": "Связь кластеров",
+      "public-edge": "Публичный вход"
     },
     "records": {
       "montana-sos": "Реестр Монтаны",
@@ -533,7 +573,11 @@ const FOOTER_CONTENT = {
       "observable": "可観測性",
       "aesthete": "メイクシミュレーション",
       "phonaid": "通話アシスタント",
-      "registry-image": "イメージレジストリ"
+      "registry-image": "イメージレジストリ",
+      "user-hub": "アカウントセンター",
+      "advfab": "ネットワーク証跡",
+      "among-clusters": "クラスター間接続",
+      "public-edge": "パブリック入口"
     },
     "records": {
       "montana-sos": "モンタナ州企業登記",
@@ -566,7 +610,11 @@ const FOOTER_CONTENT = {
       "observable": "Observabilité",
       "aesthete": "Simulation de maquillage",
       "phonaid": "Assistant d’appels",
-      "registry-image": "Registre d’images"
+      "registry-image": "Registre d’images",
+      "user-hub": "Espace compte",
+      "advfab": "Preuves réseau",
+      "among-clusters": "Interconnexion de clusters",
+      "public-edge": "Entrée publique"
     },
     "records": {
       "montana-sos": "Registre du Montana",
@@ -599,7 +647,11 @@ const FOOTER_CONTENT = {
       "observable": "Beobachtbarkeit",
       "aesthete": "Make-up-Simulation",
       "phonaid": "Anrufassistent",
-      "registry-image": "Image-Registry"
+      "registry-image": "Image-Registry",
+      "user-hub": "Kontozentrale",
+      "advfab": "Netzwerknachweise",
+      "among-clusters": "Cluster-Peering",
+      "public-edge": "Öffentlicher Eingang"
     },
     "records": {
       "montana-sos": "Register von Montana",
@@ -632,7 +684,11 @@ const FOOTER_CONTENT = {
       "observable": "관측 가능성",
       "aesthete": "메이크업 시뮬레이션",
       "phonaid": "통화 도우미",
-      "registry-image": "이미지 레지스트리"
+      "registry-image": "이미지 레지스트리",
+      "user-hub": "계정 센터",
+      "advfab": "네트워크 증거",
+      "among-clusters": "클러스터 피어링",
+      "public-edge": "공개 인그레스"
     },
     "records": {
       "montana-sos": "몬태나 기업 등록부",
@@ -665,7 +721,11 @@ const FOOTER_CONTENT = {
       "observable": "Observabilitas",
       "aesthete": "Simulasi riasan",
       "phonaid": "Asisten panggilan",
-      "registry-image": "Registri citra"
+      "registry-image": "Registri citra",
+      "user-hub": "Pusat akun",
+      "advfab": "Bukti jaringan",
+      "among-clusters": "Peering klaster",
+      "public-edge": "Ingress publik"
     },
     "records": {
       "montana-sos": "Registri Montana",
@@ -698,7 +758,11 @@ const FOOTER_CONTENT = {
       "observable": "Gözlemlenebilirlik",
       "aesthete": "Makyaj simülasyonu",
       "phonaid": "Arama asistanı",
-      "registry-image": "İmaj kayıt deposu"
+      "registry-image": "İmaj kayıt deposu",
+      "user-hub": "Hesap merkezi",
+      "advfab": "Ağ kanıtı",
+      "among-clusters": "Küme eşleme",
+      "public-edge": "Genel giriş"
     },
     "records": {
       "montana-sos": "Montana sicili",
@@ -731,7 +795,11 @@ const FOOTER_CONTENT = {
       "observable": "Khả năng quan sát",
       "aesthete": "Mô phỏng trang điểm",
       "phonaid": "Trợ lý cuộc gọi",
-      "registry-image": "Kho ảnh"
+      "registry-image": "Kho ảnh",
+      "user-hub": "Trung tâm tài khoản",
+      "advfab": "Bằng chứng mạng",
+      "among-clusters": "Kết nối cụm",
+      "public-edge": "Cổng vào công khai"
     },
     "records": {
       "montana-sos": "Đăng ký Montana",
@@ -764,7 +832,11 @@ const FOOTER_CONTENT = {
       "observable": "Osservabilità",
       "aesthete": "Simulazione del trucco",
       "phonaid": "Assistente chiamate",
-      "registry-image": "Registro immagini"
+      "registry-image": "Registro immagini",
+      "user-hub": "Centro account",
+      "advfab": "Evidenze di rete",
+      "among-clusters": "Interconnessione cluster",
+      "public-edge": "Ingresso pubblico"
     },
     "records": {
       "montana-sos": "Registro del Montana",
@@ -797,7 +869,11 @@ const FOOTER_CONTENT = {
       "observable": "مشاهده‌پذیری",
       "aesthete": "شبیه‌سازی آرایش",
       "phonaid": "دستیار تماس",
-      "registry-image": "مخزن تصاویر"
+      "registry-image": "مخزن تصاویر",
+      "user-hub": "مرکز حساب",
+      "advfab": "شواهد شبکه",
+      "among-clusters": "اتصال خوشه‌ها",
+      "public-edge": "ورودی عمومی"
     },
     "records": {
       "montana-sos": "ثبت مونتانا",
@@ -830,7 +906,11 @@ const FOOTER_CONTENT = {
       "observable": "مشاہدہ پذیری",
       "aesthete": "میک اپ سمولیشن",
       "phonaid": "کال معاون",
-      "registry-image": "امیج رجسٹری"
+      "registry-image": "امیج رجسٹری",
+      "user-hub": "اکاؤنٹ سینٹر",
+      "advfab": "نیٹ ورک شواہد",
+      "among-clusters": "کلسٹر پیئرنگ",
+      "public-edge": "عوامی داخلہ"
     },
     "records": {
       "montana-sos": "مونٹانا رجسٹری",
@@ -863,7 +943,11 @@ const FOOTER_CONTENT = {
       "observable": "การสังเกตการณ์",
       "aesthete": "การจำลองการแต่งหน้า",
       "phonaid": "ผู้ช่วยโทรศัพท์",
-      "registry-image": "คลังอิมเมจ"
+      "registry-image": "คลังอิมเมจ",
+      "user-hub": "ศูนย์บัญชี",
+      "advfab": "หลักฐานเครือข่าย",
+      "among-clusters": "การเชื่อมคลัสเตอร์",
+      "public-edge": "ทางเข้าสาธารณะ"
     },
     "records": {
       "montana-sos": "ทะเบียนมอนแทนา",
@@ -896,7 +980,11 @@ const FOOTER_CONTENT = {
       "observable": "Obserwowalność",
       "aesthete": "Symulacja makijażu",
       "phonaid": "Asystent połączeń",
-      "registry-image": "Rejestr obrazów"
+      "registry-image": "Rejestr obrazów",
+      "user-hub": "Centrum konta",
+      "advfab": "Dowody sieciowe",
+      "among-clusters": "Łączenie klastrów",
+      "public-edge": "Publiczne wejście"
     },
     "records": {
       "montana-sos": "Rejestr Montany",
@@ -929,7 +1017,11 @@ const FOOTER_CONTENT = {
       "observable": "Observeerbaarheid",
       "aesthete": "Make-upsimulatie",
       "phonaid": "Belassistent",
-      "registry-image": "Imageregister"
+      "registry-image": "Imageregister",
+      "user-hub": "Accountcentrum",
+      "advfab": "Netwerkbewijs",
+      "among-clusters": "Cluster-peering",
+      "public-edge": "Publieke ingang"
     },
     "records": {
       "montana-sos": "Register van Montana",
@@ -962,7 +1054,11 @@ const FOOTER_CONTENT = {
       "observable": "Uangalizi",
       "aesthete": "Uigaji wa vipodozi",
       "phonaid": "Msaidizi wa simu",
-      "registry-image": "Sajili ya picha"
+      "registry-image": "Sajili ya picha",
+      "user-hub": "Kituo cha akaunti",
+      "advfab": "Ushahidi wa mtandao",
+      "among-clusters": "Kuunganisha klasta",
+      "public-edge": "Lango la umma"
     },
     "records": {
       "montana-sos": "Sajili ya Montana",
@@ -995,7 +1091,11 @@ const FOOTER_CONTENT = {
       "observable": "Kebolehcerapan",
       "aesthete": "Simulasi solekan",
       "phonaid": "Pembantu panggilan",
-      "registry-image": "Daftar imej"
+      "registry-image": "Daftar imej",
+      "user-hub": "Pusat akaun",
+      "advfab": "Bukti rangkaian",
+      "among-clusters": "Persandingan kluster",
+      "public-edge": "Laluan masuk awam"
     },
     "records": {
       "montana-sos": "Daftar Montana",
@@ -1028,7 +1128,11 @@ const FOOTER_CONTENT = {
       "observable": "Pagmamasid",
       "aesthete": "Simulasyon ng makeup",
       "phonaid": "Katulong sa tawag",
-      "registry-image": "Rehistro ng imahe"
+      "registry-image": "Rehistro ng imahe",
+      "user-hub": "Account center",
+      "advfab": "Ebidensya ng network",
+      "among-clusters": "Pag-uugnay ng cluster",
+      "public-edge": "Pampublikong pasukan"
     },
     "records": {
       "montana-sos": "Rehistro ng Montana",
@@ -1061,7 +1165,11 @@ const FOOTER_CONTENT = {
       "observable": "Спостережуваність",
       "aesthete": "Симуляція макіяжу",
       "phonaid": "Помічник дзвінків",
-      "registry-image": "Реєстр образів"
+      "registry-image": "Реєстр образів",
+      "user-hub": "Центр акаунта",
+      "advfab": "Мережеві докази",
+      "among-clusters": "З’єднання кластерів",
+      "public-edge": "Публічний вхід"
     },
     "records": {
       "montana-sos": "Реєстр Монтани",
@@ -1094,7 +1202,11 @@ const FOOTER_CONTENT = {
       "observable": "יכולת תצפית",
       "aesthete": "הדמיית איפור",
       "phonaid": "עוזר שיחות",
-      "registry-image": "מאגר תמונות"
+      "registry-image": "מאגר תמונות",
+      "user-hub": "מרכז חשבון",
+      "advfab": "ראיות רשת",
+      "among-clusters": "קישור אשכולות",
+      "public-edge": "כניסה ציבורית"
     },
     "records": {
       "montana-sos": "מרשם מונטנה",
@@ -1214,6 +1326,7 @@ function normalizeProductId(value) {
   const key = String(value || '').trim().toLowerCase();
   if (key === 'anysiteonearth' || key === 'earth') return 'anysite';
   if (key === 'image' || key === 'registry') return 'registry-image';
+  if (key === 'userhub' || key === 'auth') return 'user-hub';
   return key;
 }
 
@@ -1277,6 +1390,12 @@ function localizedHref(href, locale) {
   } catch {
     return href;
   }
+}
+
+// A per-locale href map ({ en, 'zh-CN' }) is used as is, for sites that do not
+// serve every locale path; a plain URL gets the /<locale>/ path rewrite.
+function productHref(href, locale) {
+  return href && typeof href === 'object' ? translated(href, locale) : localizedHref(href, locale);
 }
 
 function assetUrl(value) {
@@ -1471,7 +1590,7 @@ class Re8chFooter extends HTMLElement {
     const description = translated(product.description, locale) || copy.products[product.id] || '';
     const aria = `${label} · ${description} ${copy.productSuffix}${isActive ? `, ${copy.currentProduct}` : ''}`;
     return `
-      <a class="re8ch-footer__product-link" href="${escapeHtml(localizedHref(product.href, locale))}" data-product-id="${escapeHtml(product.id)}" data-active="${isActive ? 'true' : 'false'}" title="${escapeHtml(aria)}" aria-label="${escapeHtml(aria)}" ${isActive ? 'aria-current="page"' : ''}${style}>
+      <a class="re8ch-footer__product-link" href="${escapeHtml(productHref(product.href, locale))}" data-product-id="${escapeHtml(product.id)}" data-active="${isActive ? 'true' : 'false'}" title="${escapeHtml(aria)}" aria-label="${escapeHtml(aria)}" ${isActive ? 'aria-current="page"' : ''}${style}>
         ${productIcon(product.icon)}
         <span dir="auto">${escapeHtml(label)}${description && locale !== 'en' ? ` · ${escapeHtml(description)}` : ''}</span>
       </a>`;
