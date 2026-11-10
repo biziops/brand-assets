@@ -27,7 +27,7 @@ const RE8CH_FOOTER_CONFIG = {
     { id: 'anysite', label: 'AnySite', href: 'https://anysiteonearth.re8ch.com', icon: 'PRODUCTS/anysiteonearth/SVG/icon.svg', brandColor: '#14b8c4' },
     { id: 'anycam', label: 'Anycam', href: 'https://anycam.re8ch.com', icon: 'PRODUCTS/anycam/SVG/icon.svg', brandColor: '#16a34a' },
     { id: 'aesthete', label: 'Aesthete', href: 'https://aesthete.re8ch.com', icon: 'PRODUCTS/aesthete/SVG/icon.svg', brandColor: '#d6a23e' },
-    { id: 'phonaid', label: 'Phonaid', href: 'https://phonaid.com', icon: 'PRODUCTS/phonaid/SVG/icon.svg', brandColor: '#8b5cf6' },
+    { id: 'phonaid', label: 'Phonaid', href: { en: 'https://phonaid.com/' }, icon: 'PRODUCTS/phonaid/SVG/icon.svg', brandColor: '#8b5cf6' },
     { id: 'cluster', label: 'Cluster', href: 'https://cluster.re8ch.com', icon: 'PRODUCTS/cluster/SVG/icon-no-edge.svg', brandColor: '#00b559' },
     { id: 'observable', label: 'Observable', href: 'https://observable.re8ch.com', icon: 'PRODUCTS/observable/SVG/icon.svg', brandColor: '#f81018' },
     { id: 'registry-image', label: 'Registry Image', href: 'https://image.re8ch.com', icon: 'PRODUCTS/registry/SVG/icon.svg', brandColor: '#0a7fbe' },
