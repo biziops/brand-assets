@@ -146,3 +146,22 @@ test('navigator ignores pre-connect upgrade reactions and preserves controls on 
   assert.equal(nav.themePreference, 'light');
   assert.equal(context.document.documentElement.dataset.theme, 'light');
 });
+
+test('navigator accepts only an explicit GoTrue session projection', () => {
+  const source = readFileSync('src/re8ch-navigator.js', 'utf8');
+  assert.doesNotMatch(source, /re8ch\.auth\.identity\.v1|re8ch_identity|\/auth\/start|\/auth\/me/);
+  const { Class } = load('navigator');
+  const nav = new Class();
+  nav.isConnected = false;
+  nav.setSession({
+    access_token: 'must-not-be-retained',
+    refresh_token: 'must-not-be-retained',
+    user: { id: 'user-1', email: 'person@example.com', user_metadata: { full_name: 'Person' } },
+  });
+  assert.deepEqual({ ...nav.goTrueIdentity }, {
+    subject: 'user-1', email: 'person@example.com', phone: '', name: 'Person', preferredUsername: '',
+  });
+  assert.doesNotMatch(JSON.stringify(nav.goTrueIdentity), /must-not-be-retained/);
+  nav.setSession(null);
+  assert.equal(nav.goTrueIdentity, null);
+});

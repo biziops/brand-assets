@@ -57,7 +57,6 @@ const USER_HUB_URL = 'https://auth.re8ch.com/';
 const STORAGE_KEYS = {
   theme: 're8ch-product-theme',
   accessibility: 're8ch-accessibility',
-  authIdentity: 're8ch.auth.identity.v1',
   localeChoice: 're8ch-locale-choice',
   localeManual: 're8ch-locale-manual',
 };
@@ -342,22 +341,17 @@ function writeAccessibility(value) {
   localStorage.setItem(STORAGE_KEYS.accessibility, JSON.stringify(value));
 }
 
-function readAuthIdentity() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.authIdentity);
-    if (!raw) return null;
-    const cached = JSON.parse(raw);
-    const identity = cached?.identity;
-    if (!identity?.subject) return null;
-    const expiresAt = Date.parse(identity.expiresAt || cached.expiresAt || '');
-    const cachedAt = Date.parse(cached.cachedAt || '') || Number(cached.cachedAt) || Date.now();
-    const fallback = cachedAt + 15 * 60 * 1000;
-    const deadline = (Number.isFinite(expiresAt) ? expiresAt : fallback) - 30000;
-    if (Date.now() > deadline) return null;
-    return identity;
-  } catch {
-    return null;
-  }
+function identityFromGoTrueSession(session) {
+  const user = session?.user || session?.session?.user;
+  if (!user?.id) return null;
+  const metadata = user.user_metadata || {};
+  return {
+    subject: user.id,
+    email: user.email || '',
+    phone: user.phone || '',
+    name: metadata.full_name || metadata.name || '',
+    preferredUsername: metadata.user_name || metadata.preferred_username || '',
+  };
 }
 
 function authLabel(identity) {
@@ -366,8 +360,13 @@ function authLabel(identity) {
 
 function isAuthAction(action, locale) {
   const label = labelText(action.label, locale).trim().toLowerCase();
-  const href = String(action.href || '');
-  return href.includes('/auth/start') || ['sign in', 'log in', 'login', '登录', '登入'].includes(label);
+  return ['sign in', 'log in', 'login', '登录', '登入'].includes(label);
+}
+
+function userHubHref() {
+  const url = new URL(USER_HUB_URL);
+  url.hash = 'home';
+  return url.href;
 }
 
 class Re8chNavigator extends HTMLElement {
@@ -386,18 +385,21 @@ class Re8chNavigator extends HTMLElement {
     this.autoThemeTimer = window.setInterval(() => {
       if (this.themePreference === 'auto') this.applyTheme('auto');
     }, 15 * 60 * 1000);
-    this.authChangeHandler = () => this.render();
-    window.addEventListener('re8ch-auth-change', this.authChangeHandler);
-    window.addEventListener('storage', this.authChangeHandler);
+    this.goTrueSessionHandler = (event) => this.setSession(event.detail?.session || event.detail || null);
+    window.addEventListener('re8ch-gotrue-session', this.goTrueSessionHandler);
   }
 
   disconnectedCallback() {
     this.abortController?.abort();
     if (this.autoThemeTimer) window.clearInterval(this.autoThemeTimer);
-    if (this.authChangeHandler) {
-      window.removeEventListener('re8ch-auth-change', this.authChangeHandler);
-      window.removeEventListener('storage', this.authChangeHandler);
+    if (this.goTrueSessionHandler) {
+      window.removeEventListener('re8ch-gotrue-session', this.goTrueSessionHandler);
     }
+  }
+
+  setSession(session) {
+    this.goTrueIdentity = identityFromGoTrueSession(session);
+    if (this.isConnected) this.render();
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -445,9 +447,9 @@ class Re8chNavigator extends HTMLElement {
     const iconHref = product.icon?.startsWith('http') ? product.icon : `${ASSET_BASE}/${product.icon}${ASSET_QUERY}`;
     const resolvedLanguages = resolveLanguages(languageCatalog, languages, locale, languageMode);
     const quickActions = extraActions.filter((action) => isAuthAction(action, locale));
-    const identity = readAuthIdentity();
-    const accountAction = identity && !quickActions.length ? this.renderUserHubAction(identity) : '';
-    const quickAccountAction = identity && !quickActions.length ? this.renderUserHubAction(identity, 're8ch-nav__action re8ch-nav__quick-auth') : '';
+    const identity = this.goTrueIdentity || null;
+    const accountAction = !quickActions.length ? this.renderUserHubAction(identity) : '';
+    const quickAccountAction = !quickActions.length ? this.renderUserHubAction(identity, 're8ch-nav__action re8ch-nav__quick-auth') : '';
 
     this.setAttribute('data-product', productId);
     this.setAttribute('data-sticky', sticky);
@@ -509,17 +511,20 @@ class Re8chNavigator extends HTMLElement {
   }
 
   renderAction(action, locale, className = 're8ch-nav__action') {
-    const identity = isAuthAction(action, locale) ? readAuthIdentity() : null;
+    const isAuth = isAuthAction(action, locale);
+    const identity = isAuth ? (this.goTrueIdentity || null) : null;
     const label = identity ? authLabel(identity) : labelText(action.label, locale);
-    const href = identity ? USER_HUB_URL : (action.href || '#');
+    const href = isAuth ? userHubHref() : (action.href || '#');
     const title = identity ? `Signed in as ${authLabel(identity)}` : label;
     const authState = identity ? ' data-auth-state="signed-in"' : '';
     return `<a class="${escapeHtml(className)}" href="${escapeHtml(href)}" rel="${escapeHtml(action.rel || 'noopener')}" title="${escapeHtml(title)}"${authState}>${escapeHtml(label)}</a>`;
   }
 
   renderUserHubAction(identity, className = 're8ch-nav__action') {
-    const label = authLabel(identity);
-    return `<a class="${escapeHtml(className)}" href="${USER_HUB_URL}" rel="noopener" title="${escapeHtml(`User Hub · ${label}`)}" data-auth-state="signed-in">${escapeHtml(label)}</a>`;
+    const label = identity ? authLabel(identity) : 'User Hub';
+    const authState = identity ? 'signed-in' : 'signed-out';
+    const title = identity ? `User Hub · ${label}` : 'RE8CH User Hub';
+    return `<a class="${escapeHtml(className)}" href="${escapeHtml(userHubHref())}" rel="noopener" title="${escapeHtml(title)}" data-auth-state="${authState}">${escapeHtml(label)}</a>`;
   }
 
   renderLanguageMenu(languages, locale, ui, menuName = 'language', extraClassName = '') {
