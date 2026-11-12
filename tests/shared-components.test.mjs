@@ -99,7 +99,7 @@ test('all 27 locales cover every product, brand and record detail', () => {
       const html = footer.renderProduct(product, '', locale, config.copy);
       assert.ok(html.includes(config.copy.products[product.id].replaceAll('&', '&amp;')));
     }
-    assert.equal(config.companyRecords.length, 10);
+    assert.equal(config.companyRecords.length, 9);
     for (const record of config.companyRecords) {
       for (const key of ['name', 'description', 'detail', 'action']) assert.ok(record[key], `${locale}: ${record.id}.${key}`);
       assert.ok(!record.detail.includes('{name}'));

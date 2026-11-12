@@ -106,7 +106,7 @@ async function iconSets() {
 }
 
 const inventory = {
-  generatedFrom: 're8ch/brand-assets',
+  generatedFrom: 'biziops/brand-assets',
   logos: await logos(),
   products: await products(),
   orgs: await orgs(),

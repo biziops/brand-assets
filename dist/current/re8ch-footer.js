@@ -38,6 +38,28 @@ const RE8CH_FOOTER_CONFIG = {
   ],
   companyRecords: [
     {
+      id: 'reachieve-certificate',
+      name: { en: 'Reachieve LLC certificate', 'zh-CN': 'Reachieve LLC 存续证明', 'zh-TW': 'Reachieve LLC 存續證明' },
+      description: { en: 'Watermarked public copy · issued 2023-08-30', 'zh-CN': '加水印公开副本 · 2023-08-30 签发', 'zh-TW': '加浮水印公開副本 · 2023-08-30 簽發' },
+      detail: { en: 'Historical Certificate of Existence issued by the Montana Secretary of State. This copy is not proof of current status.', 'zh-CN': '蒙大拿州州务卿签发的历史存续证明。公开副本不能替代实时状态查询。', 'zh-TW': '蒙大拿州州務卿簽發的歷史存續證明。公開副本不能替代即時狀態查詢。' },
+      action: { en: 'View public copy', 'zh-CN': '查看公开副本', 'zh-TW': '查看公開副本' },
+      href: `${assetBaseUrl}/company/documents/reachieve-llc-certificate-of-existence-public.pdf`,
+      logo: 'montana-sos.webp',
+      icon: 'certificate',
+      brandColor: '#8f1d1d',
+    },
+    {
+      id: 'china-business-license',
+      name: { en: 'China business license', 'zh-CN': '锐奇软件开发工作室营业执照', 'zh-TW': '銳奇軟體開發工作室營業執照' },
+      description: { en: 'Watermarked public copy · registered 2023-09-06', 'zh-CN': '加水印公开副本 · 2023-09-06 登记', 'zh-TW': '加浮水印公開副本 · 2023-09-06 登記' },
+      detail: { en: 'Public display copy of the business license. Verify current registration with the National Enterprise Credit Information Publicity System.', 'zh-CN': '营业执照公开展示副本；当前登记状态请以国家企业信用信息公示系统为准。', 'zh-TW': '營業執照公開展示副本；目前登記狀態請以國家企業信用資訊公示系統為準。' },
+      action: { en: 'View public copy', 'zh-CN': '查看公开副本', 'zh-TW': '查看公開副本' },
+      href: `${assetBaseUrl}/company/documents/reach-software-studio-business-license-public.webp`,
+      logo: 'china-credit.svg',
+      icon: 'certificate',
+      brandColor: '#b42318',
+    },
+    {
       id: 'montana-sos',
       name: 'Montana Secretary of State',
       description: 'Company Registry',
@@ -114,39 +136,6 @@ const RE8CH_FOOTER_CONFIG = {
       icon: 'crunchbase',
       brandColor: '#146aff',
     },
-    {
-      id: 'angellist',
-      name: 'AngelList',
-      description: 'Company Page',
-      detail: 'AngelList / Stack 公开主页，用于核验创业生态相关公开资料。',
-      action: 'View Profile',
-      href: 'https://stack.angellist.com/company/re8ch',
-      logo: 'angellist.svg',
-      icon: 'angellist',
-      brandColor: '#111827',
-    },
-    {
-      id: 'yc-cofounder',
-      name: 'YC Co-Founder',
-      description: 'Founder Network',
-      detail: 'YC Co-Founder Matching 公开档案，用于核验创始人网络资料。',
-      action: 'View Profile',
-      href: 'https://www.startupschool.org/cofounder-matching/candidate/k04bmwSEL',
-      logo: 'yc-cofounder.svg',
-      icon: 'yc',
-      brandColor: '#ff5a1f',
-    },
-    {
-      id: 'coffeespace',
-      name: 'CoffeeSpace',
-      description: 'Co-Working',
-      detail: 'CoffeeSpace 公开页面，用于核验创业者网络和共创空间相关资料。',
-      action: 'View Profile',
-      href: 'https://www.coffeespace.com/find-cofounders/by-location/united-states',
-      logo: 'coffeespace.png',
-      icon: 'coffee',
-      brandColor: '#7c3aed',
-    },
   ],
   contacts: [
     { id: 'contact', label: 'Contact Us', href: 'mailto:contact@re8ch.com', title: 'contact@re8ch.com', icon: 'mail' },
@@ -154,7 +143,7 @@ const RE8CH_FOOTER_CONFIG = {
     { id: 'founder', label: 'Founder Profile', href: 'https://2wood.cn/', title: 'Woomoo Neo · 2wood.cn', icon: 'person' },
   ],
   legal: {
-    copyright: '© 2026 锐奇智能 / Re8ch / 锐奇软件开发工作室 / Reachieve LLC. All rights reserved.',
+    copyright: '© 2026 RE8CH / 涟源市杨市镇锐奇软件开发工作室 / Reachieve LLC. All rights reserved.',
     icp: '湘ICP备2025130798号-4',
     icpHref: 'https://beian.miit.gov.cn',
     icpLogo: 'national-emblem.png',
@@ -1368,7 +1357,7 @@ function localeProductLabel(product, locale) {
 function localizedRecord(record, locale) {
   const copy = contentCopy(locale);
   const standard = RE8CH_FOOTER_CONFIG.companyRecords.find((item) => item.id === record.id);
-  if (!standard) return Object.fromEntries(Object.entries(record).map(([key, value]) =>
+  if (!standard || ['reachieve-certificate', 'china-business-license'].includes(record.id)) return Object.fromEntries(Object.entries(record).map(([key, value]) =>
     [key, ['name', 'description', 'detail', 'action'].includes(key) ? translated(value, locale) : value]));
   const kind = ['montana-sos', 'china-credit', 'icp', 'mps', 'duns'].includes(record.id) ? 0
     : record.id === 'yc-cofounder' ? 2 : record.id === 'coffeespace' ? 3 : 1;

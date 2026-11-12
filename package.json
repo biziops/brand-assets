@@ -13,11 +13,12 @@
     "site:dev": "python3 -m http.server 4188 --directory site",
     "site:deploy": "wrangler pages deploy site --project-name=re8ch-brand-assets --branch=main --commit-dirty=true",
     "brand-site:inventory": "node scripts/build-brand-site.mjs",
+    "company:records": "python3 scripts/build-public-records.py",
     "brand-site:dev": "python3 -m http.server 4190"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/re8ch/brand-assets.git"
+    "url": "git+https://github.com/biziops/brand-assets.git"
   },
   "keywords": [
     "re8ch",
@@ -27,9 +28,9 @@
   "author": "",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/re8ch/brand-assets/issues"
+    "url": "https://github.com/biziops/brand-assets/issues"
   },
-  "homepage": "https://github.com/re8ch/brand-assets#readme",
+  "homepage": "https://github.com/biziops/brand-assets#readme",
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1067.0",
     "@aws-sdk/lib-storage": "^3.1067.0",

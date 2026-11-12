@@ -18,7 +18,7 @@ dotenv.config({ path: path.join(root, '.env') });
 dotenv.config({ path: path.join(root, '../re8ch/.env') });
 dotenv.config();
 
-const INCLUDE = ['README.md', 'overview.png', 'SVG', 'PNG', 'ANIME', 'PRODUCTS', 'ORGS', 'UI', 'src', 'dist', 'demo', 'anycam', 're8ch-registry'];
+const INCLUDE = ['README.md', 'overview.png', 'SVG', 'PNG', 'ANIME', 'PRODUCTS', 'ORGS', 'UI', 'src', 'dist', 'demo', 'anycam', 're8ch-registry', 'company'];
 const SKIP_NAMES = new Set(['.DS_Store']);
 const r2CorsConfigPath = path.join(root, 'scripts', 'r2-cors.json');
 const cosCorsRules = [{

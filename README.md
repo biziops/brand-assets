@@ -24,6 +24,7 @@ Use the graphic logo mark with one of the following brand names:
 - `UI/` - reusable CDN web components for product pages and shared product UI.
 - `src/` - source files for the CDN navigator/footer web components and trust mark fallback assets.
 - `dist/` - publishable CDN navigator/footer component files and trust mark fallback assets.
+- `company/` - public company verification manifest and approved watermarked document copies. Originals remain private.
 - `demo/` - local HTML demo for the footer component.
 - `brand-site/` - brand.re8ch.com showcase of logos, color, type, product marks and shared UI. See `brand-site/README.md`.
 - `anycam/` - AnyCAM app icon source assets.
@@ -88,7 +89,7 @@ can use lightweight attributes for common page-level differences:
   language-mode="available"
   theme="light"
   product-ids="anysite,ledger,registry-image,cluster,observable,anycam,phonaid"
-  record-ids="montana-sos,duns,icp,china-credit,linkedin,crunchbase,angellist"
+  record-ids="reachieve-certificate,china-business-license,montana-sos,duns,icp,mps,china-credit,linkedin,crunchbase"
   records-visible="8"
   contact-email="contact@re8ch.com"
   career-email="career@re8ch.com"
@@ -223,7 +224,7 @@ Tencent notes:
 
 `.github/workflows/sync-brand-assets.yml` runs on every push to `main` and on manual dispatch.
 
-Add these GitHub Actions secrets to the `re8ch/brand-assets` repository:
+Add these GitHub Actions secrets to the `biziops/brand-assets` repository:
 
 ```text
 R2_ACCESS_KEY_ID
