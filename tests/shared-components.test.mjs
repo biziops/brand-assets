@@ -45,8 +45,7 @@ test('both containers move only on overflow, pause, and reverse at their bounds'
       querySelectorAll: () => buttons };
   };
   const rails = [makeRail(200), makeRail(500)];
-  const tooltip = { hidden: true };
-  footer.querySelector = () => tooltip;
+  footer.querySelector = () => null;
   footer.querySelectorAll = () => rails;
   footer.matches = () => false;
   footer.setupScrollRails();
@@ -58,9 +57,9 @@ test('both containers move only on overflow, pause, and reverse at their bounds'
   tick(); tick();
   assert.equal(rails[0].viewport.scrollLeft, 0);
   assert.equal(rails[1].viewport.scrollLeft, .6);
-  for (const stop of [() => { rails[1].dataset.paused = 'true'; }, () => { context.document.documentElement.dataset.re8chReduceMotion = 'true'; }, () => { context.matchMedia = () => ({ matches: true }); }, () => { tooltip.hidden = false; }, () => { context.document.hidden = true; }, () => { footer.matches = () => true; }]) {
+  for (const stop of [() => { rails[1].dataset.paused = 'true'; }, () => { context.document.documentElement.dataset.re8chReduceMotion = 'true'; }, () => { context.matchMedia = () => ({ matches: true }); }, () => { context.document.hidden = true; }, () => { footer.matches = () => true; }]) {
     rails[1].dataset.paused = 'false'; context.document.documentElement.dataset.re8chReduceMotion = 'false';
-    context.matchMedia = () => ({ matches: false }); tooltip.hidden = true; context.document.hidden = false; footer.matches = () => false;
+    context.matchMedia = () => ({ matches: false }); context.document.hidden = false; footer.matches = () => false;
     stop(); const before = rails[1].viewport.scrollLeft; tick(); assert.equal(rails[1].viewport.scrollLeft, before);
   }
   footer.matches = () => false;
@@ -108,6 +107,18 @@ test('all 27 locales cover every product, brand and record detail', () => {
     assert.equal(config.companyRecords.find(record => record.id === 'icp').description, '湘ICP备2025130798号-4');
     assert.equal(config.companyRecords.find(record => record.id === 'duns').description, '12-474-2472');
   }
+});
+
+test('company records are direct links without tooltip state', () => {
+  const { Class } = load('footer');
+  const footer = new Class();
+  const html = footer.renderCompanyRecord({
+    name: 'Official record', description: 'Registry', detail: 'Verify', action: 'Open',
+    href: 'https://example.test/record', icon: 'certificate',
+  });
+  assert.match(html, /<a class="re8ch-footer__trust-mark"/);
+  assert.match(html, /href="https:\/\/example\.test\/record"/);
+  assert.doesNotMatch(html, /aria-haspopup|aria-expanded|data-record-|<button/);
 });
 
 test('navigator ignores pre-connect upgrade reactions and preserves controls on theme changes', () => {

@@ -68,8 +68,9 @@ and do not copy Apple symbol shapes.
 
 The reusable trust footer is a framework-agnostic Web Component. It renders a
 compressed Company Trust Mark Strip: product network scroll rail with a compact
-RE8CH mark head, overflow-aware company record/public profile container, and legal/contact
-row. The RE8CH rail head is a crawlable link to `https://re8ch.com/`, and the
+RE8CH mark head, direct company record/public profile links, and a legal/contact
+row. Record links navigate directly without an intermediate tooltip; detailed
+compliance context is maintained at `https://re8ch.com/en/company/`. The RE8CH rail head is a crawlable link to `https://re8ch.com/`, and the
 contact row includes a low-key Founder Profile link to `https://2wood.cn/` for
 the company/personal-site backlink contract.
 

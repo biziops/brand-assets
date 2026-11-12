@@ -1448,7 +1448,6 @@ class Re8chFooter extends HTMLElement {
 
   disconnectedCallback() {
     cancelAnimationFrame(this.marqueeFrame);
-    this.tooltipAbort?.abort();
     this.railObserver?.disconnect();
     this.railAbort?.abort();
     this.startMarquee = null;
@@ -1554,11 +1553,9 @@ class Re8chFooter extends HTMLElement {
           ${this.hasAttribute('hide-records') ? '' : this.renderCompanyRecords(data.companyRecords, data.layout.recordsVisible, data.copy)}
           ${this.renderBottom(data.contacts, data.legal, data.copy)}
         </div>
-        <div class="re8ch-footer__record-tooltip" dir="auto" data-record-tooltip hidden></div>
       </footer>`;
 
     this.setupScrollRails();
-    this.setupRecordTooltips();
     requestAnimationFrame(() => this.updateScrollRails());
   }
 
@@ -1597,18 +1594,13 @@ class Re8chFooter extends HTMLElement {
     const style = record.brandColor ? ` style="--item-color: ${escapeHtml(record.brandColor)}"` : '';
     const aria = `${record.name}. ${record.description}. ${record.detail || record.action}`;
     return `
-      <button class="re8ch-footer__trust-mark" type="button" aria-label="${escapeHtml(aria)}" aria-haspopup="dialog" aria-expanded="false"${style}
-        data-record-name="${escapeHtml(record.name)}"
-        data-record-description="${escapeHtml(record.description)}"
-        data-record-detail="${escapeHtml(record.detail || record.description)}"
-        data-record-action="${escapeHtml(record.action)}"
-        data-record-href="${escapeHtml(record.href)}">
+      <a class="re8ch-footer__trust-mark" href="${escapeHtml(record.href)}" rel="noopener" target="_blank" aria-label="${escapeHtml(aria)}" title="${escapeHtml(record.description)}"${style}>
         <span class="re8ch-footer__trust-logo">
           ${record.logo ? `<img src="${escapeHtml(assetUrl(record.logo))}" alt="" loading="eager" decoding="async">` : icon(record.icon)}
           <span class="re8ch-footer__trust-fallback">${icon(record.icon)}</span>
         </span>
         <strong dir="auto">${escapeHtml(record.name)}</strong>
-      </button>`;
+      </a>`;
   }
 
   renderScrollRail(kind, ariaLabel, items, options = {}, copy = FOOTER_LOCALE_COPY.en) {
@@ -1638,6 +1630,7 @@ class Re8chFooter extends HTMLElement {
           <span title="${escapeHtml(legal.addressTitle || legal.address)}">${icon('location')}<span>${escapeHtml(legal.address)}</span></span>
         </nav>
         <nav class="re8ch-footer__filings" aria-label="${escapeHtml(copy.filings)}">
+          <a href="https://re8ch.com/${escapeHtml(normalizeLocale(this.getAttribute('locale') || 'en'))}/company/" rel="noopener"><span>${escapeHtml(copy.recordsLabel)}</span></a>
           <a href="${escapeHtml(legal.icpHref)}" rel="noopener" target="_blank"><img src="${escapeHtml(assetUrl(legal.icpLogo))}" alt=""><span>${escapeHtml(legal.icp)}</span></a>
           <a href="${escapeHtml(legal.mpsHref)}" rel="noopener" target="_blank"><img src="${escapeHtml(assetUrl(legal.mpsLogo))}" alt=""><span>${escapeHtml(legal.mps)}</span></a>
         </nav>
@@ -1685,8 +1678,7 @@ class Re8chFooter extends HTMLElement {
       this.marqueeFrame = 0;
       const elapsed = Math.min(now - (previous || now), 64);
       previous = now;
-      const blocked = this.prefersReducedMotion() || document.hidden || this.matches(':hover, :focus-within') ||
-        !this.querySelector('[data-record-tooltip]')?.hidden;
+      const blocked = this.prefersReducedMotion() || document.hidden || this.matches(':hover, :focus-within');
       for (const rail of rails) {
         const viewport = rail.querySelector('[data-scroll-viewport]');
         const max = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
@@ -1711,91 +1703,6 @@ class Re8chFooter extends HTMLElement {
       }
     };
     this.startMarquee();
-  }
-
-  setupRecordTooltips() {
-    const tooltip = this.querySelector('[data-record-tooltip]');
-    if (!tooltip) return;
-
-    this.tooltipAbort?.abort();
-    this.tooltipAbort = new AbortController();
-    const { signal } = this.tooltipAbort;
-    const dismiss = () => {
-      tooltip.hidden = true;
-      this.querySelectorAll('[data-record-name]').forEach((mark) => mark.setAttribute('aria-expanded', 'false'));
-    };
-    window.addEventListener('scroll', dismiss, { passive: true, capture: true, signal });
-    window.addEventListener('resize', dismiss, { signal });
-    document.addEventListener('pointerdown', (event) => { if (!this.contains(event.target)) dismiss(); }, { signal });
-    this.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') { const trigger = this.recordTrigger; dismiss(); trigger?.focus({ preventScroll: true }); dismiss(); }
-      if (event.key === 'Tab' && event.shiftKey && tooltip.contains(event.target)) {
-        event.preventDefault(); this.recordTrigger?.focus({ preventScroll: true });
-      }
-      if (event.key === 'Tab' && !event.shiftKey && event.target.matches('[data-record-name]') && !tooltip.hidden) {
-        event.preventDefault(); tooltip.querySelector('a')?.focus();
-      }
-    }, { signal });
-    let hideTimer;
-    const clearHide = () => {
-      if (hideTimer) window.clearTimeout(hideTimer);
-      hideTimer = undefined;
-    };
-    const scheduleHide = () => {
-      clearHide();
-      hideTimer = window.setTimeout(() => {
-        dismiss();
-        tooltip.dataset.open = 'false';
-      }, 240);
-    };
-
-    tooltip.addEventListener('mouseenter', clearHide);
-    tooltip.addEventListener('mouseleave', scheduleHide);
-    tooltip.addEventListener('focusin', clearHide);
-    tooltip.addEventListener('focusout', scheduleHide);
-
-    this.querySelectorAll('.re8ch-footer__trust-mark').forEach((mark) => {
-      const show = () => { clearHide(); this.showRecordTooltip(mark, tooltip); };
-      mark.addEventListener('mouseenter', show);
-      mark.addEventListener('focusin', show);
-      mark.addEventListener('mouseleave', scheduleHide);
-      mark.addEventListener('focusout', scheduleHide);
-      mark.addEventListener('click', show);
-    });
-  }
-
-  showRecordTooltip(mark, tooltip) {
-    this.recordTrigger = mark;
-    this.querySelectorAll('[data-record-name]').forEach((item) => item.setAttribute('aria-expanded', String(item === mark)));
-    const name = mark.dataset.recordName || '';
-    const description = mark.dataset.recordDescription || '';
-    const detail = mark.dataset.recordDetail || '';
-    const action = mark.dataset.recordAction || 'View';
-    const href = mark.dataset.recordHref || '#';
-
-    tooltip.innerHTML = `
-      <strong>${escapeHtml(name)}</strong>
-      <small>${escapeHtml(description)}</small>
-      <p>${escapeHtml(detail)}</p>
-      <a href="${escapeHtml(href)}" rel="noopener" target="_blank">${escapeHtml(action)} <span aria-hidden="true">→</span></a>`;
-    tooltip.setAttribute('role', 'dialog');
-    tooltip.setAttribute('aria-label', name);
-    tooltip.hidden = false;
-    tooltip.dataset.open = 'true';
-
-    const rect = mark.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
-    const gap = 10;
-    const left = Math.min(
-      Math.max(12, rect.left + rect.width / 2 - tooltipRect.width / 2),
-      window.innerWidth - tooltipRect.width - 12,
-    );
-    const top = rect.top > tooltipRect.height + gap + 12
-      ? rect.top - tooltipRect.height - gap
-      : rect.bottom + gap;
-
-    tooltip.style.left = `${left}px`;
-    tooltip.style.top = `${Math.max(12, top)}px`;
   }
 
   updateScrollRails() {
