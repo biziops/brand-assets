@@ -59,7 +59,12 @@ const STORAGE_KEYS = {
   accessibility: 're8ch-accessibility',
   localeChoice: 're8ch-locale-choice',
   localeManual: 're8ch-locale-manual',
+  goTrueSession: 're8ch.gotrue.session.v1',
 };
+
+const USER_HUB_ORIGIN = new URL(USER_HUB_URL).origin;
+const GO_TRUE_MESSAGE_TYPE = 're8ch-gotrue-session';
+const GO_TRUE_CHANNEL = 're8ch-gotrue-session';
 
 const PRODUCT_CONFIG = {
   re8ch: { label: 'RE8CH', href: 'https://re8ch.com', icon: 'SVG/logo.svg', color: '#2563eb' },
@@ -366,7 +371,32 @@ function isAuthAction(action, locale) {
 function userHubHref() {
   const url = new URL(USER_HUB_URL);
   url.hash = 'home';
+  try {
+    const returnTo = new URL(window.location.href);
+    if (['http:', 'https:'].includes(returnTo.protocol)) {
+      url.searchParams.set('return_to', returnTo.href);
+      url.searchParams.set('handoff', 'opener');
+    }
+  } catch {}
   return url.href;
+}
+
+function readGoTrueSession() {
+  try {
+    const session = JSON.parse(localStorage.getItem(STORAGE_KEYS.goTrueSession) || 'null');
+    if (!session?.access_token || !session?.user?.id) return null;
+    if (session.expires_at && Number(session.expires_at) * 1000 <= Date.now()) return null;
+    return session;
+  } catch {
+    return null;
+  }
+}
+
+function writeGoTrueSession(session) {
+  try {
+    if (session?.access_token && session?.user?.id) localStorage.setItem(STORAGE_KEYS.goTrueSession, JSON.stringify(session));
+    else localStorage.removeItem(STORAGE_KEYS.goTrueSession);
+  } catch {}
 }
 
 class Re8chNavigator extends HTMLElement {
@@ -385,20 +415,42 @@ class Re8chNavigator extends HTMLElement {
     this.autoThemeTimer = window.setInterval(() => {
       if (this.themePreference === 'auto') this.applyTheme('auto');
     }, 15 * 60 * 1000);
+    const restoredSession = readGoTrueSession();
+    this.setSession(restoredSession, { broadcast: false });
     this.goTrueSessionHandler = (event) => this.setSession(event.detail?.session || event.detail || null);
     window.addEventListener('re8ch-gotrue-session', this.goTrueSessionHandler);
+    if (restoredSession) {
+      this.goTrueRestoreTimer = window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent(GO_TRUE_MESSAGE_TYPE, { detail: { session: restoredSession, restored: true } }));
+      }, 0);
+    }
+    this.goTrueMessageHandler = (event) => {
+      if (event.origin !== USER_HUB_ORIGIN || event.data?.type !== GO_TRUE_MESSAGE_TYPE) return;
+      window.dispatchEvent(new CustomEvent(GO_TRUE_MESSAGE_TYPE, { detail: { session: event.data.session || null } }));
+    };
+    window.addEventListener('message', this.goTrueMessageHandler);
+    if ('BroadcastChannel' in window) {
+      this.goTrueChannel = new window.BroadcastChannel(GO_TRUE_CHANNEL);
+      this.goTrueChannel.addEventListener('message', (event) => this.setSession(event.data?.session || null, { broadcast: false }));
+    }
   }
 
   disconnectedCallback() {
     this.abortController?.abort();
     if (this.autoThemeTimer) window.clearInterval(this.autoThemeTimer);
+    if (this.goTrueRestoreTimer) window.clearTimeout(this.goTrueRestoreTimer);
     if (this.goTrueSessionHandler) {
       window.removeEventListener('re8ch-gotrue-session', this.goTrueSessionHandler);
     }
+    if (this.goTrueMessageHandler) window.removeEventListener('message', this.goTrueMessageHandler);
+    this.goTrueChannel?.close();
   }
 
-  setSession(session) {
+  setSession(session, { broadcast = true } = {}) {
+    this.goTrueSession = session?.access_token && session?.user?.id ? session : null;
     this.goTrueIdentity = identityFromGoTrueSession(session);
+    writeGoTrueSession(this.goTrueSession);
+    if (broadcast) this.goTrueChannel?.postMessage({ session: this.goTrueSession });
     if (this.isConnected) this.render();
   }
 
@@ -517,14 +569,15 @@ class Re8chNavigator extends HTMLElement {
     const href = isAuth ? userHubHref() : (action.href || '#');
     const title = identity ? `Signed in as ${authLabel(identity)}` : label;
     const authState = identity ? ' data-auth-state="signed-in"' : '';
-    return `<a class="${escapeHtml(className)}" href="${escapeHtml(href)}" rel="${escapeHtml(action.rel || 'noopener')}" title="${escapeHtml(title)}"${authState}>${escapeHtml(label)}</a>`;
+    const authTarget = isAuth ? ' target="re8ch-user-hub" rel="opener"' : ` rel="${escapeHtml(action.rel || 'noopener')}"`;
+    return `<a class="${escapeHtml(className)}" href="${escapeHtml(href)}"${authTarget} title="${escapeHtml(title)}"${authState}>${escapeHtml(label)}</a>`;
   }
 
   renderUserHubAction(identity, className = 're8ch-nav__action') {
     const label = identity ? authLabel(identity) : 'User Hub';
     const authState = identity ? 'signed-in' : 'signed-out';
     const title = identity ? `User Hub · ${label}` : 'RE8CH User Hub';
-    return `<a class="${escapeHtml(className)}" href="${escapeHtml(userHubHref())}" rel="noopener" title="${escapeHtml(title)}" data-auth-state="${authState}">${escapeHtml(label)}</a>`;
+    return `<a class="${escapeHtml(className)}" href="${escapeHtml(userHubHref())}" target="re8ch-user-hub" rel="opener" title="${escapeHtml(title)}" data-auth-state="${authState}">${escapeHtml(label)}</a>`;
   }
 
   renderLanguageMenu(languages, locale, ui, menuName = 'language', extraClassName = '') {

@@ -96,7 +96,11 @@ test('all 27 locales cover every product, brand and record detail', () => {
     for (const product of config.products) {
       assert.ok(config.copy.products[product.id], `${locale}: ${product.id}`);
       const html = footer.renderProduct(product, '', locale, config.copy);
-      assert.ok(html.includes(config.copy.products[product.id].replaceAll('&', '&amp;')));
+      if (locale === 'en') assert.ok(html.includes(product.label));
+      else {
+        assert.ok(html.includes(config.copy.products[product.id].replaceAll('&', '&amp;')));
+        assert.ok(!html.includes(`${product.label} ·`), `${locale}: mixed product label`);
+      }
     }
     assert.equal(config.companyRecords.length, 9);
     for (const record of config.companyRecords) {
@@ -147,7 +151,7 @@ test('navigator ignores pre-connect upgrade reactions and preserves controls on 
   assert.equal(context.document.documentElement.dataset.theme, 'light');
 });
 
-test('navigator accepts only an explicit GoTrue session projection', () => {
+test('navigator persists explicit GoTrue sessions without legacy auth state', () => {
   const source = readFileSync('src/re8ch-navigator.js', 'utf8');
   assert.doesNotMatch(source, /re8ch\.auth\.identity\.v1|re8ch_identity|\/auth\/start|\/auth\/me/);
   const { Class } = load('navigator');
@@ -162,6 +166,10 @@ test('navigator accepts only an explicit GoTrue session projection', () => {
     subject: 'user-1', email: 'person@example.com', phone: '', name: 'Person', preferredUsername: '',
   });
   assert.doesNotMatch(JSON.stringify(nav.goTrueIdentity), /must-not-be-retained/);
+  assert.match(source, /re8ch\.gotrue\.session\.v1/);
+  assert.match(source, /event\.origin !== USER_HUB_ORIGIN/);
+  assert.match(source, /BroadcastChannel/);
+  assert.match(source, /return_to/);
   nav.setSession(null);
   assert.equal(nav.goTrueIdentity, null);
 });
