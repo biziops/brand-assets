@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "publisher": "RE8CH / 锐奇",
+  "generatedAt": "2026-11-12",
+  "notice": {
+    "en": "Public verification index. Document copies are watermarked and do not replace a current registry search.",
+    "zh-CN": "企业公开核验索引。证件副本均带水印，不能替代登记机关的实时查询结果。"
+  },
+  "entities": [
+    {
+      "id": "reachieve-llc",
+      "legalName": "Reachieve LLC",
+      "jurisdiction": "Montana, United States",
+      "formedOn": "2023-08-29",
+      "officialRegistry": "https://biz.sosmt.gov/search/business",
+      "publicDocuments": [
+        {
+          "id": "certificate-of-existence-2023",
+          "type": "Certificate of Existence",
+          "issuedOn": "2023-08-30",
+          "certificateNumber": "44365126",
+          "href": "documents/reachieve-llc-certificate-of-existence-public.pdf",
+          "watermarked": true,
+          "currentStatusEvidence": false,
+          "bytes": 517755,
+          "sha256": "266bf3a0b145e11ba9b8bbcf5d6d17a2558fa587016399db08794380001ea2d5"
+        }
+      ],
+      "privateEvidence": [
+        "IRS EIN assignment notices (full identifier withheld)"
+      ]
+    },
+    {
+      "id": "reach-software-studio",
+      "legalName": "涟源市杨市镇锐奇软件开发工作室",
+      "jurisdiction": "湖南省娄底市涟源市",
+      "formedOn": "2023-09-06",
+      "officialRegistry": "https://www.gsxt.gov.cn/index.html",
+      "publicDocuments": [
+        {
+          "id": "business-license-2023",
+          "type": "营业执照",
+          "issuedOn": "2023-09-06",
+          "href": "documents/reach-software-studio-business-license-public.webp",
+          "watermarked": true,
+          "currentStatusEvidence": false,
+          "bytes": 260306,
+          "sha256": "c70ca851320773d68ddf679f933f98db5503e2371ebd03062a9ed0d1dddacba8"
+        }
+      ]
+    }
+  ],
+  "websiteFilings": [
+    {
+      "type": "ICP",
+      "identifier": "湘ICP备2025130798号-4",
+      "officialRegistry": "https://beian.miit.gov.cn"
+    },
+    {
+      "type": "MPS",
+      "identifier": "湘公网安备43138202000213号",
+      "officialRegistry": "https://beian.mps.gov.cn/#/query/webSearch?code=43138202000213"
+    }
+  ],
+  "businessIdentifiers": [
+    {
+      "type": "D-U-N-S",
+      "identifier": "12-474-2472",
+      "officialRegistry": "https://www.dnb.com/duns-number/lookup.html"
+    },
+    {
+      "type": "EIN",
+      "identifier": "**-***last-four-withheld",
+      "visibility": "private",
+      "note": "Original IRS notices retained in the private compliance repository."
+    }
+  ],
+  "publicProfiles": [
+    {
+      "type": "LinkedIn",
+      "href": "https://www.linkedin.com/company/107777110"
+    },
+    {
+      "type": "Crunchbase",
+      "href": "https://www.crunchbase.com/organization/re8ch"
+    }
+  ]
+}

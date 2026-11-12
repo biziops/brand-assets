@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/re8ch-*'
       - 'dist/**'
+      - 'company/**'
+      - 'scripts/build-public-records.py'
       - 'tests/shared-components.test.mjs'
       - '.github/workflows/validate-shared-components.yml'
   push:
@@ -11,6 +13,8 @@ on:
     paths:
       - 'src/re8ch-*'
       - 'dist/**'
+      - 'company/**'
+      - 'scripts/build-public-records.py'
       - 'tests/shared-components.test.mjs'
       - '.github/workflows/validate-shared-components.yml'
 permissions:
@@ -26,3 +30,8 @@ jobs:
       - run: node --check src/re8ch-navigator.js
       - run: node --check src/re8ch-footer.js
       - run: node --test tests/shared-components.test.mjs
+      - name: Validate public company record manifest
+        run: |
+          node -e "const r=require('./company/records.json'); if(r.schemaVersion!==1||r.entities.length!==2) process.exit(1)"
+          test -f company/documents/reachieve-llc-certificate-of-existence-public.pdf
+          test -f company/documents/reach-software-studio-business-license-public.webp
