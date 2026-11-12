@@ -149,6 +149,27 @@ navigation/action labels all resolve against the active `locale`. Navigator
 renders also mirror `locale`, `language-options`, `language-mode`, and resolved
 theme onto every `<re8ch-footer>` on the page.
 
+Authentication is owned by pg-identity's Supabase GoTrue service and the User
+Hub at `https://auth.re8ch.com/`. The Navigator never reads the retired
+`re8ch.auth.identity.v1` cache, calls legacy `/auth/start` or `/auth/me`
+endpoints, or stores a bearer token. Its account action always opens User Hub.
+An application that already has a verified Supabase session may project only
+the user-facing account label into the component without exposing the token:
+
+```js
+const { data } = await supabase.auth.getSession();
+document.querySelector('re8ch-navigator')?.setSession(data.session);
+
+supabase.auth.onAuthStateChange((_event, session) => {
+  window.dispatchEvent(new CustomEvent('re8ch-gotrue-session', {
+    detail: { session },
+  }));
+});
+```
+
+The session remains owned and refreshed by the product's Supabase client. The
+Navigator uses only `session.user` and discards the access and refresh tokens.
+
 For larger site-level changes, override the default data before loading the component:
 
 ```html

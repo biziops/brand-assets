@@ -45,6 +45,13 @@ Navigator principles:
 - Navigator chrome must localize with the active `locale`: menu, language,
   theme, accessibility, toggle labels, glass labels, and page-provided
   navigation/action labels all need localized values for every rendered option.
+- Account and sign-in actions go directly to `https://auth.re8ch.com/#home`.
+  Do not use the retired `/auth/start`, `/auth/me`, `re8ch_identity`, or
+  `re8ch.auth.identity.v1` contracts.
+- Product applications that own a pg-identity Supabase GoTrue session may call
+  `navigator.setSession(session)` or dispatch `re8ch-gotrue-session`. The CDN
+  component reads only `session.user`; it never owns, persists, refreshes, or
+  transmits the bearer token.
 
 ## Shared Footer
 
