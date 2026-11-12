@@ -152,9 +152,16 @@ theme onto every `<re8ch-footer>` on the page.
 Authentication is owned by pg-identity's Supabase GoTrue service and the User
 Hub at `https://auth.re8ch.com/`. The Navigator never reads the retired
 `re8ch.auth.identity.v1` cache, calls legacy `/auth/start` or `/auth/me`
-endpoints, or stores a bearer token. Its account action always opens User Hub.
-An application that already has a verified Supabase session may project only
-the user-facing account label into the component without exposing the token:
+endpoints. Its account action opens User Hub with an allowlisted `return_to`
+URL and an opener handoff request. After sign-in, User Hub posts the verified
+GoTrue session to that exact origin and returns the user to the originating
+page; access and refresh tokens are never placed in a URL.
+
+The Navigator caches that explicit GoTrue session under
+`re8ch.gotrue.session.v1` on the product origin and mirrors it through
+`BroadcastChannel`, so other tabs on the same origin share the signed-in state.
+Expired sessions are rejected. The product's Supabase client remains
+responsible for refreshing or revoking the session and may publish updates:
 
 ```js
 const { data } = await supabase.auth.getSession();
@@ -167,8 +174,8 @@ supabase.auth.onAuthStateChange((_event, session) => {
 });
 ```
 
-The session remains owned and refreshed by the product's Supabase client. The
-Navigator uses only `session.user` and discards the access and refresh tokens.
+The Navigator accepts the handoff only from `https://auth.re8ch.com` and the
+User Hub targets only the validated originating product origin.
 
 For larger site-level changes, override the default data before loading the component:
 
@@ -292,7 +299,9 @@ All 27 supported locales include the brand label, descriptions for all nine
 products, names for registries, descriptions for all ten records and detail-card
 actions. Official trademarks and registration identifiers are preserved. Custom
 brand names, product labels/descriptions and record name/description/detail/action
-fields may be locale-keyed objects with an English fallback. Cards support Tab
+fields may be locale-keyed objects. Product and record display text uses one
+locale at a time rather than joining an English label to a localized description;
+official identifiers and trademarks remain unchanged. Cards support Tab
 into their link, Shift+Tab back to the trigger, and Escape to dismiss.
 
 Run `node --test tests/shared-components.test.mjs` to check opacity boundaries,

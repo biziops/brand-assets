@@ -1357,16 +1357,23 @@ function localeProductLabel(product, locale) {
 function localizedRecord(record, locale) {
   const copy = contentCopy(locale);
   const standard = RE8CH_FOOTER_CONFIG.companyRecords.find((item) => item.id === record.id);
-  if (!standard || ['reachieve-certificate', 'china-business-license'].includes(record.id)) return Object.fromEntries(Object.entries(record).map(([key, value]) =>
+  const normalized = normalizeLocale(locale);
+  const hasCompleteNativeRecord = ['name', 'description', 'detail', 'action'].every((key) =>
+    !record[key] || typeof record[key] !== 'object' || Object.prototype.hasOwnProperty.call(record[key], normalized));
+  if (!standard || (['reachieve-certificate', 'china-business-license'].includes(record.id) && hasCompleteNativeRecord)) return Object.fromEntries(Object.entries(record).map(([key, value]) =>
     [key, ['name', 'description', 'detail', 'action'].includes(key) ? translated(value, locale) : value]));
   const kind = ['montana-sos', 'china-credit', 'icp', 'mps', 'duns'].includes(record.id) ? 0
     : record.id === 'yc-cofounder' ? 2 : record.id === 'coffeespace' ? 3 : 1;
-  const name = typeof record.name === 'object' ? translated(record.name, locale) : (copy.records[record.id] || record.name);
+  const hasNativeName = typeof record.name === 'object' && Object.prototype.hasOwnProperty.call(record.name, normalized);
+  const hasNativeDescription = typeof record.description === 'object' && Object.prototype.hasOwnProperty.call(record.description, normalized);
+  const hasNativeDetail = typeof record.detail === 'object' && Object.prototype.hasOwnProperty.call(record.detail, normalized);
+  const hasNativeAction = typeof record.action === 'object' && Object.prototype.hasOwnProperty.call(record.action, normalized);
+  const name = hasNativeName ? translated(record.name, locale) : (copy.records[record.id] || translated(record.name, 'en') || record.name);
   const identifier = ['duns', 'icp', 'mps'].includes(record.id) ? record.description : '';
   return { ...record, name,
-    description: typeof record.description === 'object' ? translated(record.description, locale) : identifier || copy.kinds[kind],
-    detail: typeof record.detail === 'object' ? translated(record.detail, locale) : copy.detail.replace('{name}', name),
-    action: typeof record.action === 'object' ? translated(record.action, locale) : copy.action };
+    description: hasNativeDescription ? translated(record.description, locale) : identifier || copy.kinds[kind],
+    detail: hasNativeDetail ? translated(record.detail, locale) : copy.detail.replace('{name}', name),
+    action: hasNativeAction ? translated(record.action, locale) : copy.action };
 }
 
 function localizedHref(href, locale) {
@@ -1572,13 +1579,14 @@ class Re8chFooter extends HTMLElement {
   renderProduct(product, activeProduct, locale, copy) {
     const isActive = normalizeProductId(product.id) === normalizeProductId(activeProduct);
     const style = product.brandColor ? ` style="--item-color: ${escapeHtml(product.brandColor)}"` : '';
-    const label = localeProductLabel(product, locale);
+    const brandLabel = localeProductLabel(product, locale);
     const description = translated(product.description, locale) || copy.products[product.id] || '';
-    const aria = `${label} · ${description} ${copy.productSuffix}${isActive ? `, ${copy.currentProduct}` : ''}`;
+    const label = normalizeLocale(locale) === 'en' ? brandLabel : (description || brandLabel);
+    const aria = `${label} ${copy.productSuffix}${isActive ? `, ${copy.currentProduct}` : ''}`;
     return `
       <a class="re8ch-footer__product-link" href="${escapeHtml(productHref(product.href, locale))}" data-product-id="${escapeHtml(product.id)}" data-active="${isActive ? 'true' : 'false'}" title="${escapeHtml(aria)}" aria-label="${escapeHtml(aria)}" ${isActive ? 'aria-current="page"' : ''}${style}>
         ${productIcon(product.icon)}
-        <span dir="auto">${escapeHtml(label)}${description && locale !== 'en' ? ` · ${escapeHtml(description)}` : ''}</span>
+        <span dir="auto">${escapeHtml(label)}</span>
       </a>`;
   }
 
